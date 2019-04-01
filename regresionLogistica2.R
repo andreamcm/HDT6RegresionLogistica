@@ -43,11 +43,13 @@ datos <- na.omit(datos)
 # Regresión Logistica
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
-datos$VelocidadAdopcion <- plyr::revalue(datos$AdoptionSpeed, c("0" = "1", "1" = "1", "2" = "1", "3" = "0", "4" = "0"))
+datos$VelocidadAdopcion <- revalue(datos$AdoptionSpeed, c("0" = "1", "1" = "1", "2" = "1", "3" = "0", "4" = "0"))
+datos$Tipo <- revalue(datos$Type, c("1" = "0", "2" = "1"))
 
 
 datos$AdoptionSpeed <- factor(datos$AdoptionSpeed)
 datos$AdoptionSpeed
+datos$Type <- factor(datos$Type)
 
 porcentaje<-0.7
 set.seed(123)
@@ -60,7 +62,7 @@ corte <- sample(nrow(datos), nrow(datos)*porcentaje)
 train <- datos[corte, ]
 test <- datos[-corte, ]
 
-modelo <- glm(AdoptionSpeed ~ Type + Age, data = train, family = binomial(), maxit = 10000)
+modelo <- glm(VelocidadAdopcion ~ Tipo, data = train, family = binomial(), maxit = 10000)
 #summary(modelo)
 #test$AdoptionSpeed
 
@@ -68,7 +70,8 @@ pred <- predict(modelo, newdata = test, type = "response")
 pred
 prediccion <- ifelse(pred == 1, 1, 0)
 prediccion
-confusionMatrix(as.factor(test$AdoptionSpeed), as.factor(prediccion))
+test$VelocidadAdopcion
+confusionMatrix(as.factor(test$VelocidadAdopcion), as.factor(prediccion))
 
 
 
