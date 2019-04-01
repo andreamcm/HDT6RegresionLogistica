@@ -70,7 +70,6 @@ plot(modelo)
 
 pred <- predict(modelo, newdata = test[,c("Tipo", "VelocidadAdopcion")], type = "response")
 pred
-pred2 <- pred[c(0,1),]
 prediccion <- ifelse(pred >= 1, 1, 0)
 prediccion
 predi <- table(prediccion)
